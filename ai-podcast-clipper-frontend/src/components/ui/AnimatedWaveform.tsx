@@ -1,5 +1,6 @@
 "use client";
 
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { useEffect, useRef, useState } from "react";
 
 interface AnimatedWaveformProps {
