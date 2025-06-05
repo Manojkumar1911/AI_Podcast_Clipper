@@ -5,6 +5,13 @@
 import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  env: {
+    NODE_ENV: process.env.NODE_ENV || "production",
+  },
+  experimental: {
+    serverActions: true,
+  },
+};
 
 export default config;
