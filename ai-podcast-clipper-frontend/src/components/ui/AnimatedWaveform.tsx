@@ -58,12 +58,16 @@ export function AnimatedWaveform({ filename, audioUrl }: AnimatedWaveformProps) 
       frameRef.current = requestAnimationFrame(drawFrame);
     };
 
-    try {
-      await audio.play();
-      drawFrame();
-    } catch (error) {
-      console.error("Error playing audio:", error);
-    }
+    const initAudio = async () => {
+      try {
+        await audio.play();
+        drawFrame();
+      } catch (error) {
+        console.error("Error playing audio:", error);
+      }
+    };
+
+    void initAudio();
 
     return () => {
       if (frameRef.current) {
