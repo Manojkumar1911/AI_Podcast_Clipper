@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { cn } from "~/lib/utils";
+import { toast } from "sonner";
 
 interface PricingPlan {
   title: string;
@@ -62,6 +63,18 @@ const plans: PricingPlan[] = [
 ];
 
 function PricingCard({ plan }: { plan: PricingPlan }) {
+  const handleCheckout = async () => {
+    try {
+      await createCheckoutSession(plan.priceId);
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Failed to start checkout. Please try again later.");
+      }
+    }
+  };
+
   return (
     <Card
       className={cn(
@@ -95,14 +108,13 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
         </ul>
       </CardContent>
       <CardFooter>
-        <form
-          action={() => createCheckoutSession(plan.priceId)}
+        <Button
+          variant={plan.buttonVariant}
           className="w-full"
+          onClick={handleCheckout}
         >
-          <Button variant={plan.buttonVariant} className="w-full" type="submit">
-            {plan.buttonText}
-          </Button>
-        </form>
+          {plan.buttonText}
+        </Button>
       </CardFooter>
     </Card>
   );
