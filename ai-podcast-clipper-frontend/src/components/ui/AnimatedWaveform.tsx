@@ -30,47 +30,37 @@ export function AnimatedWaveform({ filename, audioUrl }: AnimatedWaveformProps) 
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
 
-    const draw = async () => {
+    const drawFrame = () => {
       if (!canvasRef.current) return;
       
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
-      const drawFrame = () => {
-        if (!canvasRef.current) return;
-        
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
+      analyser.getByteFrequencyData(dataArray);
 
-        analyser.getByteFrequencyData(dataArray);
+      ctx.fillStyle = "rgb(255, 255, 255)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.fillStyle = "rgb(255, 255, 255)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      const barWidth = (canvas.width / bufferLength) * 2.5;
+      let barHeight;
+      let x = 0;
 
-        const barWidth = (canvas.width / bufferLength) * 2.5;
-        let barHeight;
-        let x = 0;
+      for (let i = 0; i < bufferLength; i++) {
+        barHeight = (dataArray?.[i] ?? 0) / 2;
 
-        for (let i = 0; i < bufferLength; i++) {
-          barHeight = (dataArray?.[i] ?? 0) / 2;
+        ctx.fillStyle = `rgb(${barHeight + 100}, 50, 50)`;
+        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
 
-          ctx.fillStyle = `rgb(${barHeight + 100}, 50, 50)`;
-          ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-
-          x += barWidth + 1;
-        }
-
-        frameRef.current = requestAnimationFrame(drawFrame);
-      };
+        x += barWidth + 1;
+      }
 
       frameRef.current = requestAnimationFrame(drawFrame);
     };
 
     try {
       await audio.play();
-      await draw();
+      drawFrame();
     } catch (error) {
       console.error("Error playing audio:", error);
     }
