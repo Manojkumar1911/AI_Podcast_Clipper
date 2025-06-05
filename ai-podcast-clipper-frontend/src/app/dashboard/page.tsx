@@ -43,10 +43,10 @@ export default async function DashboardPage() {
   const formattedFiles = userData.uploadedFiles.map((file) => ({
     id: file.id,
     s3Key: file.s3Key,
-    filename: file.displayName ?? "Unkown filename",
+    filename: file.displayName ?? "Unknown filename",
     status: file.status,
     clipsCount: file._count.clips,
-    createdAt: `${file.createdAt.getMonth() + 1}/${file.createdAt.getDate()}/${file.createdAt.getFullYear()}`,
+    createdAt: file.createdAt,
   }));
 
   return (
