@@ -11,9 +11,6 @@ const config = {
     },
   },
   output: 'standalone',
-  env: {
-    NODE_ENV: process.env.NODE_ENV || 'production',
-  },
   // Disable static optimization for not-found page
   staticPageGenerationTimeout: 120,
   onDemandEntries: {
