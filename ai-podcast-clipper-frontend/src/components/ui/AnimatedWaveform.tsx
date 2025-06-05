@@ -10,7 +10,7 @@ interface AnimatedWaveformProps {
 export function AnimatedWaveform({ filename, audioUrl }: AnimatedWaveformProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const frameRef = useRef<number>();
+  const frameRef = useRef<number | undefined>(undefined);
 
   const draw = useCallback(() => {
     if (!canvasRef.current) return;
