@@ -60,9 +60,10 @@ export function AnimatedWaveform({ filename, audioUrl }: AnimatedWaveformProps) 
       console.error("Error playing audio:", error);
     });
     
-    void draw();
+    const animationFrame = requestAnimationFrame(draw);
 
     return () => {
+      cancelAnimationFrame(animationFrame);
       audio.pause();
       audioContext.close();
     };

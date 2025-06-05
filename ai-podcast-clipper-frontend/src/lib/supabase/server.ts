@@ -17,14 +17,14 @@ export async function createClient() {
           try {
             cookieStore.set({ name, value, ...options })
           } catch (error) {
-            // Handle cookie setting error
+            console.error("Error setting cookie:", error)
           }
         },
         remove(name: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value: "", ...options })
           } catch (error) {
-            // Handle cookie removal error
+            console.error("Error removing cookie:", error)
           }
         },
       },
