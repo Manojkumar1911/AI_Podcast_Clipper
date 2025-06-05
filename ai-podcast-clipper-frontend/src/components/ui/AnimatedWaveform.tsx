@@ -36,7 +36,7 @@ export function AnimatedWaveform({ filename, audioUrl }: AnimatedWaveformProps) 
     if (!ctx) return;
 
     const draw = () => {
-      requestAnimationFrame(draw);
+      const frameId = requestAnimationFrame(draw);
       analyser.getByteFrequencyData(dataArray);
 
       ctx.fillStyle = "rgb(255, 255, 255)";
@@ -54,16 +54,22 @@ export function AnimatedWaveform({ filename, audioUrl }: AnimatedWaveformProps) 
 
         x += barWidth + 1;
       }
+
+      return frameId;
     };
 
     audio.play().catch((error) => {
       console.error("Error playing audio:", error);
     });
     
-    const animationFrame = requestAnimationFrame(draw);
+    let frameId: number;
+    const startAnimation = () => {
+      frameId = draw();
+    };
+    startAnimation();
 
     return () => {
-      cancelAnimationFrame(animationFrame);
+      cancelAnimationFrame(frameId);
       audio.pause();
       audioContext.close();
     };
