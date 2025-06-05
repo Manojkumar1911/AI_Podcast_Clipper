@@ -72,7 +72,7 @@ export function AnimatedWaveform({ filename, audioUrl }: AnimatedWaveformProps) 
       console.error("Error playing audio:", error);
     });
     
-    draw();
+    void draw();
 
     return () => {
       if (frameRef.current) {
