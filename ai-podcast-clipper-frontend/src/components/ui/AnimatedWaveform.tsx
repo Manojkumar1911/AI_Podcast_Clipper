@@ -30,7 +30,7 @@ export function AnimatedWaveform({ filename, audioUrl }: AnimatedWaveformProps) 
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
 
-    const draw = () => {
+    const draw = async () => {
       if (!canvasRef.current) return;
       
       const canvas = canvasRef.current;
@@ -68,11 +68,12 @@ export function AnimatedWaveform({ filename, audioUrl }: AnimatedWaveformProps) 
       frameRef.current = requestAnimationFrame(drawFrame);
     };
 
-    audio.play().catch((error) => {
+    try {
+      await audio.play();
+      await draw();
+    } catch (error) {
       console.error("Error playing audio:", error);
-    });
-    
-    void draw();
+    }
 
     return () => {
       if (frameRef.current) {
