@@ -6,11 +6,10 @@ import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
 const config = {
-  env: {
-    NODE_ENV: process.env.NODE_ENV || "production",
-  },
   experimental: {
-    serverActions: true,
+    serverActions: {
+      allowedOrigins: ["localhost:3000", "ai-podcast-clipper.vercel.app"],
+    },
   },
 };
 
