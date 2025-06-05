@@ -20,6 +20,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${geist.variable} bg-gradient-to-br from-purple-200 via-pink-200 to-teal-200`}>
+      <head />
       <body>
         <ClientProvider>
           {children}
