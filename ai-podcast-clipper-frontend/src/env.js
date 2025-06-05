@@ -21,12 +21,12 @@ export const env = createEnv({
     S3_BUCKET_NAME: z.string(),
     PROCESS_VIDEO_ENDPOINT: z.string(),
     PROCESS_VIDEO_ENDPOINT_AUTH: z.string(),
-    STRIPE_SECRET_KEY: z.string(),
-    STRIPE_SMALL_CREDIT_PACK: z.string(),
-    STRIPE_MEDIUM_CREDIT_PACK: z.string(),
-    STRIPE_LARGE_CREDIT_PACK: z.string(),
+    STRIPE_SECRET_KEY: z.string().optional(),
+    STRIPE_SMALL_CREDIT_PACK: z.string().optional(),
+    STRIPE_MEDIUM_CREDIT_PACK: z.string().optional(),
+    STRIPE_LARGE_CREDIT_PACK: z.string().optional(),
     BASE_URL: z.string(),
-    STRIPE_WEBHOOK_SECRET: z.string(),
+    STRIPE_WEBHOOK_SECRET: z.string().optional(),
   },
 
   /**
@@ -36,7 +36,7 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
-    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string(),
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().optional(),
   },
 
   /**
