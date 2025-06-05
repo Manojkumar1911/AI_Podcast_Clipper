@@ -1,5 +1,9 @@
-// stripe listen --forward-to localhost:3000/api/webhooks/stripe
+// Stripe webhook functionality is temporarily disabled
+export async function POST(req: Request) {
+  return new Response("Stripe webhook is disabled", { status: 501 });
+}
 
+/* Original Stripe webhook code (commented out)
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
@@ -78,3 +82,4 @@ export async function POST(req: Request) {
     );
   }
 }
+*/

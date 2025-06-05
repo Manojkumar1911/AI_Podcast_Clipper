@@ -34,7 +34,7 @@ const plans: PricingPlan[] = [
     price: "$9.99",
     description: "Perfect for occasional podcast creators",
     features: ["50 credits", "No expiration", "Download all clips"],
-    buttonText: "Buy 50 credits",
+    buttonText: "Coming Soon",
     buttonVariant: "outline",
     priceId: "small",
   },
@@ -43,7 +43,7 @@ const plans: PricingPlan[] = [
     price: "$24.99",
     description: "Best value for regular podcasters",
     features: ["150 credits", "No expiration", "Download all clips"],
-    buttonText: "Buy 150 credits",
+    buttonText: "Coming Soon",
     buttonVariant: "default",
     isPopular: true,
     savePercentage: "Save 17%",
@@ -54,7 +54,7 @@ const plans: PricingPlan[] = [
     price: "$69.99",
     description: "Ideal for podcast studioes and agencies",
     features: ["500 credits", "No expiration", "Download all clips"],
-    buttonText: "Buy 500 credits",
+    buttonText: "Coming Soon",
     buttonVariant: "outline",
     isPopular: false,
     savePercentage: "Save 30%",
@@ -64,15 +64,7 @@ const plans: PricingPlan[] = [
 
 function PricingCard({ plan }: { plan: PricingPlan }) {
   const handleCheckout = async () => {
-    try {
-      await createCheckoutSession(plan.priceId);
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error("Failed to start checkout. Please try again later.");
-      }
-    }
+    toast.info("Payment processing is coming soon!");
   };
 
   return (
@@ -139,8 +131,7 @@ export default function BillingPage() {
             Buy Credits
           </h1>
           <p className="text-muted-foreground">
-            Purchase credits to generate more podcast clips. The more credtis
-            you buy, the better the value.
+            Payment processing is coming soon. Stay tuned for updates!
           </p>
         </div>
       </div>

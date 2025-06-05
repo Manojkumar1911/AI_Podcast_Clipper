@@ -1,3 +1,11 @@
+// Stripe functionality is temporarily disabled
+export type PriceId = "small" | "medium" | "large";
+
+export async function createCheckoutSession(priceId: PriceId) {
+  throw new Error("Stripe checkout is currently disabled");
+}
+
+/* Original Stripe code (commented out)
 "use server";
 
 import { redirect } from "next/navigation";
@@ -58,3 +66,4 @@ export async function createCheckoutSession(priceId: PriceId) {
 
   redirect(session.url);
 }
+*/
