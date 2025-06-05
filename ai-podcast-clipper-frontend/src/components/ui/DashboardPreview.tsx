@@ -1,5 +1,4 @@
-
-import { Upload, Play, Download, MoreHorizontal } from "lucide-react";
+import { Upload, Play, Download } from "lucide-react";
 
 export const DashboardPreview = () => {
   return (
@@ -74,7 +73,7 @@ export const DashboardPreview = () => {
                               <Play className="w-4 h-4 text-white/80 group-hover:scale-110 transition-transform" />
                             </div>
                             <div className="absolute bottom-0.5 left-0.5 right-0.5 bg-black/80 rounded text-xs text-white px-1">
-                              "Viral moment..."
+                              &quot;Viral moment...&quot;
                             </div>
                           </div>
                           <div className="flex justify-between items-center">

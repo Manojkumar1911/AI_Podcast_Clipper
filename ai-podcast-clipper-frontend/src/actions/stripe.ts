@@ -1,8 +1,8 @@
 // Stripe functionality is temporarily disabled
 export type PriceId = "small" | "medium" | "large";
 
-export async function createCheckoutSession(priceId: PriceId) {
-  throw new Error("Stripe checkout is currently disabled");
+export async function createCheckoutSession(_priceId: string) {
+  throw new Error("Stripe is not configured")
 }
 
 /* Original Stripe code (commented out)

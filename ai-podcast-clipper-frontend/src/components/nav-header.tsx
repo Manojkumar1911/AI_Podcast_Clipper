@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,11 +10,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "./ui/avatar";
+} from "~/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { signOut } from "next-auth/react";
-import { useEffect } from "react";
-import { toast } from "sonner";
 
 const NavHeader = ({ credits, email }: { credits: number; email: string }) => {
   return (

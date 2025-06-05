@@ -1,31 +1,24 @@
 "use client";
 
-import { cn } from "~/lib/utils";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, type LoginFormValues } from "~/schemas/auth";
+import { Loader2 } from "lucide-react";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "./ui/card";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { Button } from "./ui/button";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+} from "~/components/ui/card";
+import { cn } from "~/lib/utils";
 import Link from "next/link";
-import {
-  loginSchema,
-  signupSchema,
-  type LoginFormValues,
-  type SignupFormValues,
-} from "~/schemas/auth";
-import { signUp } from "~/actions/auth";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
 
 export function LoginForm({
   className,
@@ -57,8 +50,8 @@ export function LoginForm({
       } else {
         router.push("/dashboard");
       }
-    } catch (error) {
-      setError("An unexpected error occured");
+    } catch {
+      setError("An unexpected error occurred");
     } finally {
       setIsSubmitting(false);
     }

@@ -1,82 +1,95 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Play } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
-// Pre-defined heights for the waveform bars to avoid hydration mismatches
-const waveformHeights = [
-  69, 51, 61, 38, 60, 71, 47, 68, 24, 43, 42, 32, 67, 66, 74, 74, 46, 71, 46, 73,
-  54, 62, 51, 32, 72, 35, 69, 79, 67, 57, 46, 62, 78, 23, 22, 35, 64, 36, 45, 40,
-  79, 36, 57, 44, 62, 78, 23, 22, 35, 64
-];
+interface AnimatedWaveformProps {
+  filename: string;
+  audioUrl?: string;
+}
 
-export const AnimatedWaveform = () => {
-  const [isAnimating, setIsAnimating] = useState(false);
+export function AnimatedWaveform({ filename, audioUrl }: AnimatedWaveformProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsAnimating(true), 1000);
-    return () => clearTimeout(timer);
-  }, []);
+    if (!audioUrl) {
+      setIsLoading(false);
+      return;
+    }
+
+    const audio = new Audio(audioUrl);
+    const audioContext = new AudioContext();
+    const analyser = audioContext.createAnalyser();
+    const source = audioContext.createMediaElementSource(audio);
+
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
+
+    analyser.fftSize = 256;
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const draw = () => {
+      requestAnimationFrame(draw);
+      analyser.getByteFrequencyData(dataArray);
+
+      ctx.fillStyle = "rgb(255, 255, 255)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const barWidth = (canvas.width / bufferLength) * 2.5;
+      let barHeight;
+      let x = 0;
+
+      for (let i = 0; i < bufferLength; i++) {
+        barHeight = (dataArray?.[i] ?? 0) / 2;
+
+        ctx.fillStyle = `rgb(${barHeight + 100}, 50, 50)`;
+        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+
+        x += barWidth + 1;
+      }
+    };
+
+    audio.play().catch((error) => {
+      console.error("Error playing audio:", error);
+      setIsLoading(false);
+    });
+    
+    void draw();
+
+    return () => {
+      audio.pause();
+      audioContext.close();
+    };
+  }, [audioUrl]);
+
+  if (!audioUrl) {
+    return (
+      <div className="flex items-center justify-center">
+        <p className="text-sm text-muted-foreground">No audio file &quot;{filename}&quot; found</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="relative">
-      {/* Podcast Waveform */}
-      <div className={`transition-all duration-2000 ${isAnimating ? 'transform scale-110 opacity-60' : ''}`}>
-        <div className="flex items-center justify-center gap-1 mb-8">
-          {waveformHeights.map((height, i) => (
-            <div
-              key={i}
-              className="bg-gradient-to-t from-blue-400 to-purple-400 rounded-full animate-pulse"
-              style={{
-                width: '4px',
-                height: `${height}px`,
-                animationDelay: `${i * 50}ms`,
-                animationDuration: '1500ms'
-              }}
-            />
-          ))}
+    <div className="relative w-full">
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-background/50">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
         </div>
-      </div>
-
-      {/* Transformation Arrow */}
-      <div className={`text-center mb-8 transition-all duration-1000 ${isAnimating ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
-        <div className="inline-flex items-center gap-2 text-cyan-400">
-          <div className="w-8 h-0.5 bg-gradient-to-r from-transparent to-cyan-400"></div>
-          <span className="text-sm font-medium">AI MAGIC</span>
-          <div className="w-8 h-0.5 bg-gradient-to-r from-cyan-400 to-transparent"></div>
-        </div>
-      </div>
-
-      {/* TikTok-style Video Preview */}
-      <div className={`transition-all duration-2000 delay-1000 ${isAnimating ? 'transform scale-100 opacity-100' : 'scale-75 opacity-0'}`}>
-        <div className="relative mx-auto w-64 h-96 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl border border-gray-700 overflow-hidden shadow-2xl">
-          {/* Video Content */}
-          <div className="absolute inset-2 bg-gradient-to-br from-blue-900/50 to-purple-900/50 rounded-xl">
-            <div className="flex items-center justify-center h-full">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto">
-                  <Play className="w-8 h-8 text-white" />
-                </div>
-                <p className="text-xs text-gray-300">Viral Clip Ready</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Subtitle Bar */}
-          <div className="absolute bottom-4 left-2 right-2 bg-black/80 rounded-lg p-2">
-            <p className="text-xs text-white text-center font-medium">
-              "This is the moment that changes everything..."
-            </p>
-          </div>
-
-          {/* TikTok UI Elements */}
-          <div className="absolute top-4 right-4 flex flex-col gap-3">
-            <div className="w-8 h-8 bg-white/20 rounded-full"></div>
-            <div className="w-8 h-8 bg-red-500/80 rounded-full"></div>
-            <div className="w-8 h-8 bg-yellow-500/80 rounded-full"></div>
-          </div>
-        </div>
-      </div>
+      )}
+      <canvas
+        ref={canvasRef}
+        width={300}
+        height={100}
+        className="w-full rounded-lg bg-background"
+      />
     </div>
   );
-};
+}

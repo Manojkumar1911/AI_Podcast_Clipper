@@ -1,6 +1,6 @@
 // Stripe webhook functionality is temporarily disabled
-export async function POST(req: Request) {
-  return new Response("Stripe webhook is disabled", { status: 501 });
+export async function POST(_req: Request) {
+  return new Response("Stripe webhook is disabled", { status: 200 });
 }
 
 /* Original Stripe webhook code (commented out)

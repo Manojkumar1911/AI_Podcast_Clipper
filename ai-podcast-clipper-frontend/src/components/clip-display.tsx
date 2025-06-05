@@ -4,7 +4,8 @@ import type { Clip } from "@prisma/client";
 import { Download, Loader2, Play } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getClipPlayUrl } from "~/actions/generation";
-import { Button } from "./ui/button";
+import { Button } from "~/components/ui/button";
+import { toast } from "sonner";
 
 function ClipCard({ clip }: { clip: Clip }) {
   const [playUrl, setPlayUrl] = useState<string | null>(null);
@@ -19,7 +20,9 @@ function ClipCard({ clip }: { clip: Clip }) {
         } else if (result.error) {
           console.error("Failed to get play url: " + result.error);
         }
-      } catch (error) {
+      } catch (err) {
+        console.error("Error playing clip:", err)
+        toast.error("Failed to play clip")
       } finally {
         setIsLoadingUrl(false);
       }

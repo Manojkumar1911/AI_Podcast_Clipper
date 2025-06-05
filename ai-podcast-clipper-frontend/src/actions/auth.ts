@@ -1,55 +1,42 @@
 "use server";
 
-import { hashPassword } from "~/lib/auth";
-import { signupSchema, type SignupFormValues } from "~/schemas/auth";
-import { db } from "~/server/db";
-// import Stripe from "stripe";
-import { env } from "~/env";
+import { redirect } from "next/navigation"
+import { createClient } from "~/lib/supabase/server"
 
-type SignupResult = {
-  success: boolean;
-  error?: string;
-};
+export async function signIn(provider: string, options: { email: string; password: string; redirect: boolean }) {
+  const supabase = await createClient()
+  const { error } = await supabase.auth.signInWithPassword({
+    email: options.email,
+    password: options.password,
+  })
 
-export async function signUp(data: SignupFormValues): Promise<SignupResult> {
-  const validationResult = signupSchema.safeParse(data);
-  if (!validationResult.success) {
-    return {
-      success: false,
-      error: validationResult.error.issues[0]?.message ?? "Invalid input",
-    };
+  if (error) {
+    return { error: error.message }
   }
 
-  const { email, password } = validationResult.data;
-
-  try {
-    const existingUser = await db.user.findUnique({ where: { email } });
-
-    if (existingUser) {
-      return {
-        success: false,
-        error: "Email already in use",
-      };
-    }
-
-    const hashedPassword = await hashPassword(password);
-
-    // const stripe = new Stripe(env.STRIPE_SECRET_KEY);
-
-    // const stripeCustomer = await stripe.customers.create({
-    //   email: email.toLowerCase(),
-    // });
-
-    await db.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        // stripeCustomerId: stripeCustomer.id,
-      },
-    });
-
-    return { success: true };
-  } catch (error) {
-    return { success: false, error: error instanceof Error ? error.message : "An unexpected error occured" };
+  if (options.redirect) {
+    redirect("/dashboard")
   }
+
+  return { error: null }
+}
+
+export async function signUp(data: { email: string; password: string }) {
+  const supabase = await createClient()
+  const { error } = await supabase.auth.signUp({
+    email: data.email,
+    password: data.password,
+  })
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  return { success: true }
+}
+
+export async function signOut() {
+  const supabase = await createClient()
+  await supabase.auth.signOut()
+  redirect("/")
 }

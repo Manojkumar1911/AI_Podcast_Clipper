@@ -72,7 +72,7 @@ export const Hero = () => {
 
           {/* Animated Waveform Demo */}
           <div className="max-w-4xl mx-auto">
-            <AnimatedWaveform />
+            <AnimatedWaveform filename="demo-audio.mp3" />
           </div>
         </div>
       </div>

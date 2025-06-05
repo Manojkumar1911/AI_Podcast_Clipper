@@ -1,20 +1,16 @@
 "use client";
 
-import type { VariantProps } from "class-variance-authority";
-import { ArrowLeftIcon, CheckIcon } from "lucide-react";
+import { Button } from "~/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card"
+import { Check } from "lucide-react"
+import { toast } from "sonner"
+import type { buttonVariants } from "~/components/ui/button"
+import type { VariantProps } from "class-variance-authority"
 import Link from "next/link";
-import { createCheckoutSession, type PriceId } from "~/actions/stripe";
-import { Button, buttonVariants } from "~/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { ArrowLeftIcon } from "lucide-react";
 import { cn } from "~/lib/utils";
-import { toast } from "sonner";
+
+type PriceId = "small" | "medium" | "large";
 
 interface PricingPlan {
   title: string;
@@ -52,7 +48,7 @@ const plans: PricingPlan[] = [
   {
     title: "Large Pack",
     price: "$69.99",
-    description: "Ideal for podcast studioes and agencies",
+    description: "Ideal for podcast studios and agencies",
     features: ["500 credits", "No expiration", "Download all clips"],
     buttonText: "Coming Soon",
     buttonVariant: "outline",
@@ -93,7 +89,7 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
         <ul className="text-muted-foreground space-y-2 text-sm">
           {plan.features.map((feature, index) => (
             <li key={index} className="flex items-center gap-2">
-              <CheckIcon className="text-primary size-4" />
+              <Check className="text-primary size-4" />
               {feature}
             </li>
           ))}
