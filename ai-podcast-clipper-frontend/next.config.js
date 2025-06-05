@@ -10,9 +10,7 @@ const config = {
       allowedOrigins: ["localhost:3000", "ai-podcast-clipper.vercel.app"],
     },
   },
-  env: {
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-  },
+  output: 'standalone',
 };
 
 export default config;
