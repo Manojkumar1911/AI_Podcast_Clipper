@@ -11,6 +11,7 @@ export function AnimatedWaveform({ filename, audioUrl }: AnimatedWaveformProps) 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const frameRef = useRef<number | undefined>(undefined);
+  const animationRef = useRef<boolean>(true);
 
   useEffect(() => {
     if (!audioUrl) {
@@ -30,9 +31,9 @@ export function AnimatedWaveform({ filename, audioUrl }: AnimatedWaveformProps) 
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
 
-    const drawFrame = () => {
-      if (!canvasRef.current) return;
-      
+    const animate = () => {
+      if (!animationRef.current || !canvasRef.current) return;
+
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
@@ -48,28 +49,30 @@ export function AnimatedWaveform({ filename, audioUrl }: AnimatedWaveformProps) 
 
       for (let i = 0; i < bufferLength; i++) {
         barHeight = (dataArray?.[i] ?? 0) / 2;
-
         ctx.fillStyle = `rgb(${barHeight + 100}, 50, 50)`;
         ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-
         x += barWidth + 1;
       }
 
-      frameRef.current = requestAnimationFrame(drawFrame);
+      frameRef.current = requestAnimationFrame(animate);
     };
 
-    const initAudio = async () => {
+    const startAnimation = async () => {
       try {
         await audio.play();
-        drawFrame();
+        setIsLoading(false);
+        animationRef.current = true;
+        frameRef.current = requestAnimationFrame(animate);
       } catch (error) {
         console.error("Error playing audio:", error);
+        setIsLoading(false);
       }
     };
 
-    void initAudio();
+    startAnimation().catch(console.error);
 
     return () => {
+      animationRef.current = false;
       if (frameRef.current) {
         cancelAnimationFrame(frameRef.current);
       }
