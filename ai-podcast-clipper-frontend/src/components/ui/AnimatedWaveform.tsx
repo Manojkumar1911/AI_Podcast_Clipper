@@ -58,7 +58,6 @@ export function AnimatedWaveform({ filename, audioUrl }: AnimatedWaveformProps) 
 
     audio.play().catch((error) => {
       console.error("Error playing audio:", error);
-      setIsLoading(false);
     });
     
     void draw();
