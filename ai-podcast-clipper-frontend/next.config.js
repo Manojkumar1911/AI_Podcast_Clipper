@@ -29,6 +29,10 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  // Ensure error pages are handled correctly
+  pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
+  poweredByHeader: false,
+  reactStrictMode: true,
 };
 
-export default nextConfig;
+module.exports = nextConfig;
