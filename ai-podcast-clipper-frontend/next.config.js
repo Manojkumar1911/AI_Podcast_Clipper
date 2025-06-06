@@ -5,11 +5,10 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  env: {
-    NODE_ENV: process.env.NODE_ENV || 'production',
-  },
   experimental: {
-    serverActions: true,
+    serverActions: {
+      allowedOrigins: ['localhost:3000', 'ai-podcast-clipper.vercel.app'],
+    },
   },
   output: 'standalone',
   // Ensure environment variables are available during build
