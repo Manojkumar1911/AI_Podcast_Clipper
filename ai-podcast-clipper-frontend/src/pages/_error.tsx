@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import Link from 'next/link';
 
 interface ErrorProps {
   statusCode?: number;
@@ -17,12 +18,12 @@ const Error: NextPage<ErrorProps> = ({ statusCode = 404 }) => {
             ? "Sorry, we couldn't find the page you're looking for."
             : 'Sorry, something went wrong.'}
         </p>
-        <a
+        <Link
           href="/"
           className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
           Return Home
-        </a>
+        </Link>
       </div>
     </div>
   );
