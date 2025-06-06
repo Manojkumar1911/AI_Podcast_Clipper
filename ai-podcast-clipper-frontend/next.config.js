@@ -30,6 +30,8 @@ const nextConfig = {
   // Set source directory
   pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
   poweredByHeader: false,
+  // Set source directory
+  dir: 'src',
 };
 
 export default nextConfig;
