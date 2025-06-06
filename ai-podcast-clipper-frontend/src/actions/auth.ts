@@ -1,17 +1,19 @@
 "use server";
 
 import { redirect } from "next/navigation"
-import { createClient } from "~/lib/supabase/server"
+import { signIn as nextAuthSignIn, signOut as nextAuthSignOut } from "next-auth/react"
+import { db } from "~/server/db"
+import { hash } from "bcryptjs"
 
 export async function signIn(provider: string, options: { email: string; password: string; redirect: boolean }) {
-  const supabase = await createClient()
-  const { error } = await supabase.auth.signInWithPassword({
+  const result = await nextAuthSignIn("credentials", {
     email: options.email,
     password: options.password,
+    redirect: false,
   })
 
-  if (error) {
-    return { error: error.message }
+  if (result?.error) {
+    return { error: result.error }
   }
 
   if (options.redirect) {
@@ -22,21 +24,32 @@ export async function signIn(provider: string, options: { email: string; passwor
 }
 
 export async function signUp(data: { email: string; password: string }) {
-  const supabase = await createClient()
-  const { error } = await supabase.auth.signUp({
-    email: data.email,
-    password: data.password,
-  })
+  try {
+    const existingUser = await db.user.findUnique({
+      where: { email: data.email },
+    })
 
-  if (error) {
-    return { success: false, error: error.message }
+    if (existingUser) {
+      return { success: false, error: "User already exists" }
+    }
+
+    const hashedPassword = await hash(data.password, 12)
+
+    await db.user.create({
+      data: {
+        email: data.email,
+        password: hashedPassword,
+      },
+    })
+
+    return { success: true }
+  } catch (error) {
+    console.error("Error creating user:", error)
+    return { success: false, error: "Failed to create user" }
   }
-
-  return { success: true }
 }
 
 export async function signOut() {
-  const supabase = await createClient()
-  await supabase.auth.signOut()
+  await nextAuthSignOut()
   redirect("/")
 }

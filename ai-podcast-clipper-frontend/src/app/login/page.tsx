@@ -17,12 +17,12 @@ export default async function Page() {
       <div className="relative flex flex-col md:flex-row w-full max-w-5xl rounded-xl shadow-2xl overflow-hidden bg-white/80 backdrop-blur-md">
         {/* Left side: Image */}
         <div className="relative w-full md:w-1/2 h-64 md:h-auto">
-          <Image 
+          <Image
             src="/Copilot_20250531_163406.png"
-            alt="Login page image"
-            layout="fill"
-            objectFit="cover"
-            className="rounded-t-xl md:rounded-l-xl md:rounded-t-none"
+            alt="Background"
+            fill
+            className="object-cover"
+            priority
           />
         </div>
 
