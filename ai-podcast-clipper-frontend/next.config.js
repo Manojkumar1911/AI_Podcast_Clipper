@@ -33,9 +33,8 @@ const nextConfig = {
   pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
   poweredByHeader: false,
   reactStrictMode: true,
-  // Configure source directory
+  // Configure build output directory
   distDir: '.next',
-  dir: 'src',
 };
 
 export default nextConfig;
