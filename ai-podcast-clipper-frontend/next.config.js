@@ -27,11 +27,9 @@ const nextConfig = {
   },
   // Set build output directory
   distDir: '.next',
-  // Set source directory
+  // Set source file extensions
   pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
   poweredByHeader: false,
-  // Set source directory
-  dir: 'src',
 };
 
 export default nextConfig;
