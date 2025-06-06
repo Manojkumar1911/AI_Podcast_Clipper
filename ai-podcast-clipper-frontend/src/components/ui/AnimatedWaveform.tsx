@@ -83,7 +83,7 @@ export function AnimatedWaveform({ filename, audioUrl }: AnimatedWaveformProps) 
   }, [audioUrl]);
 
   if (!audioUrl) {
-    return (
+  return (
       <div className="flex items-center justify-center">
         <p className="text-sm text-muted-foreground">No audio file &quot;{filename}&quot; found</p>
       </div>

@@ -21,20 +21,6 @@ const nextConfig = {
     }
     return config;
   },
-  // Disable static optimization for error pages
-  staticPageGenerationTimeout: 120,
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  // Ensure error pages are handled correctly
-  pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
-  poweredByHeader: false,
-  reactStrictMode: true,
-  // Configure build output directory
-  distDir: '.next',
 };
 
 export default nextConfig;
